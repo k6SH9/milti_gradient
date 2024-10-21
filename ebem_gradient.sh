@@ -33,6 +33,20 @@ restore_files() {
     cp Dockerfile.bak Dockerfile
 }
 
+get_next_container_name() {
+    # Получаем все контейнеры с именем, начинающимся на "gradient-"
+    last_container=$(docker ps -a --filter "name=gradient-" --format "{{.Names}}" | sed 's/gradient-//' | sort -n | tail -n 1)
+
+    # Если нет контейнеров, то имя будет gradient-1
+    if [[ -z "$last_container" ]]; then
+        echo "gradient-1"
+    else
+        # Увеличиваем номер последнего контейнера на 1
+        next_number=$((last_container + 1))
+        echo "gradient-$next_number"
+    fi
+}
+
 # Функция для обновления main.go и Dockerfile
 update_files() {
     proxy="${PROXIES[$(($1 % ${#PROXIES[@]}))]}"
@@ -59,12 +73,11 @@ update_files() {
 # Функция для запуска контейнеров
 start_containers() {
     for ((i = 0; i < $1; i++)); do
-        echo "Установка контейнера №" $((i+1))
         update_files $i $2 $3
-        container_name="gradient-$((i+1))"
+        container_name=$(get_next_container_name)
         docker build -t "$container_name" .
         docker run -d --name "$container_name" "$container_name"
-        echo "Контейнер" $((i+1)) "установлен"
+        restore_files  # Восстанавливаем файлы после каждого шага
     done
 }
 
