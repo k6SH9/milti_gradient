@@ -79,18 +79,6 @@ stop_containers() {
     fi
 }
 
-# Функция для перезапуска контейнеров
-restart_containers() {
-    containers=$(docker ps --filter "name=gradient-" --format "{{.Names}}")
-    i=0
-    for container in $containers; do
-        docker stop "$container"
-        update_files $i "email_placeholder" "password_placeholder"
-        docker start "$container"
-        ((i++))
-    done
-}
-
 # Функция для вывода статистики контейнеров
 container_stats() {
     docker stats $(docker ps -a --filter "name=gradient-" --format "{{.Names}}")
@@ -101,10 +89,9 @@ while true; do
     echo "
 Выберите действие:
 1. Установить контейнеры
-2. Переустановить контейнеры
-3. Завершить контейнеры
-4. Статистика запущенных контейнеров
-5. Выход
+2. Завершить контейнеры
+3. Статистика запущенных контейнеров
+4. Выход
 "
 
     read -rp "Введите номер действия: " choice
@@ -118,17 +105,13 @@ while true; do
             start_containers $num_containers
             ;;
         2)
-            parse_proxies
-            restart_containers
-            ;;
-        3)
             read -rp "Введите номер контейнера для завершения (или 0 для завершения всех): " container_number
             stop_containers $container_number
             ;;
-        4)
+        3)
             container_stats
             ;;
-        5)
+        4)
             echo "Выход..."
             restore_files  # Восстанавливаем файлы перед выходом
             exit 0
