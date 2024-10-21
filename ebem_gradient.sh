@@ -18,9 +18,19 @@ echo "
 "
 echo "by k6sh9 & Ebynbi yzlov"
 
+# Создаем резервные копии исходных файлов
+cp main.go main.go.bak
+cp Dockerfile Dockerfile.bak
+
 # Функция для парсинга файла proxys.txt
 parse_proxies() {
     mapfile -t PROXIES < proxys.txt
+}
+
+# Функция для восстановления файлов main.go и Dockerfile в исходное состояние
+restore_files() {
+    cp main.go.bak main.go
+    cp Dockerfile.bak Dockerfile
 }
 
 # Функция для обновления main.go и Dockerfile
@@ -120,6 +130,7 @@ while true; do
             ;;
         5)
             echo "Выход..."
+            restore_files  # Восстанавливаем файлы перед выходом
             exit 0
             ;;
         *)
