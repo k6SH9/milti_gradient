@@ -64,7 +64,7 @@ start_containers() {
         container_name="gradient-$((i+1))"
         docker build -t "$container_name" .
         docker run -d --name "$container_name" "$container_name"
-        echo "Контейнер " $((i+1)) " установлен"
+        echo "Контейнер" $((i+1)) "установлен"
     done
 }
 
