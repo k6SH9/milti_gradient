@@ -83,7 +83,7 @@ restart_containers() {
 
 # Функция для вывода статистики контейнеров
 container_stats() {
-    docker stats ${docker ps -a --filter "name=gradient-" --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}"}
+    docker stats $(docker ps -a --filter "name=gradient-" --format "{{.Names}}")
 }
 
 # Главное меню
