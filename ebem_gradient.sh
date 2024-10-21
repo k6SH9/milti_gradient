@@ -49,12 +49,12 @@ update_files() {
 # Функция для запуска контейнеров
 start_containers() {
     for ((i = 0; i < $1; i++)); do
-        echo "Установка контейнера №" i++
+        echo "Установка контейнера №" $((i+1))
         update_files $i $2 $3
         container_name="gradient-$((i+1))"
         docker build -t "$container_name" .
         docker run -d --name "$container_name" "$container_name"
-        echo "Контейнер " i++ " установлен"
+        echo "Контейнер " $((i+1)) " установлен"
     done
 }
 
@@ -83,7 +83,7 @@ restart_containers() {
 
 # Функция для вывода статистики контейнеров
 container_stats() {
-    docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}"
+    docker stats ${docker ps -a --filter "name=gradient-" --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}"}
 }
 
 # Главное меню
