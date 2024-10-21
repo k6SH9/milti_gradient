@@ -104,7 +104,7 @@ while true; do
         1)
             read -rp "Сколько контейнеров запустить? " num_containers
             read -rp "Введите email: " email
-            read -rp "Введите password: " password
+            read -rsp "Введите password: " password
             parse_proxies
             start_containers $num_containers
             ;;
