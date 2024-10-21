@@ -73,11 +73,13 @@ update_files() {
 # Функция для запуска контейнеров
 start_containers() {
     for ((i = 0; i < $1; i++)); do
+        echo "Установка контейнера №" $((i+1))
         update_files $i $2 $3
         container_name=$(get_next_container_name)
         docker build -t "$container_name" .
         docker run -d --name "$container_name" "$container_name"
         restore_files  # Восстанавливаем файлы после каждого шага
+        echo "Контейнер" $((i+1)) "установлен"
     done
 }
 
