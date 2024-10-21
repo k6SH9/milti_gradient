@@ -66,8 +66,8 @@ start_containers() {
         echo "Установка контейнера №" $((i+1))
         update_files $i $2 $3
         container_name=$(get_next_container_name)
-        docker build -t "$container_name" .
-        docker run -d --name "$container_name" "$container_name"
+        docker build -t "$container_name" . > /dev/null 2>&1
+        docker run -d --name "$container_name" "$container_name" > /dev/null 2>&1
         echo "Контейнер" $((i+1)) "установлен"
     done
 }
