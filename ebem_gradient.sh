@@ -18,19 +18,9 @@ echo "
 "
 echo "by k6sh9 & Ebynbi yzlov"
 
-# Создаем резервные копии исходных файлов
-cp main.go main.go.bak
-cp Dockerfile Dockerfile.bak
-
 # Функция для парсинга файла proxys.txt
 parse_proxies() {
     mapfile -t PROXIES < proxys.txt
-}
-
-# Функция для восстановления файлов main.go и Dockerfile в исходное состояние
-restore_files() {
-    cp main.go.bak main.go
-    cp Dockerfile.bak Dockerfile
 }
 
 get_next_container_name() {
@@ -78,7 +68,6 @@ start_containers() {
         container_name=$(get_next_container_name)
         docker build -t "$container_name" .
         docker run -d --name "$container_name" "$container_name"
-        restore_files  # Восстанавливаем файлы после каждого шага
         echo "Контейнер" $((i+1)) "установлен"
     done
 }
@@ -128,7 +117,6 @@ while true; do
             ;;
         4)
             echo "Выход..."
-            restore_files  # Восстанавливаем файлы перед выходом
             exit 0
             ;;
         *)
