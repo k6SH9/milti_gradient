@@ -32,8 +32,8 @@ update_files() {
     proxy_password=$(echo "$proxy" | cut -d':' -f4)
 
     # Заменяем email и password в main.go
-    sed -i "s/\$email/$2/g" main.go
-    sed -i "s/\$password/$3/g" main.go
+    sed -i "s/\$email/$email/g" main.go
+    sed -i "s/\$password/$password/g" main.go
 
     # Заменяем прокси-данные в main.go
     sed -i "s/\$proxyLOGIN/$proxy_login/g" main.go
@@ -49,12 +49,12 @@ update_files() {
 # Функция для запуска контейнеров
 start_containers() {
     for ((i = 0; i < $1; i++)); do
-        echo "Установка контейнера №" $i
+        echo "Установка контейнера №" $i+1
         update_files $i $2 $3
         container_name="gradient-$((i+1))"
         docker build -t "$container_name" .
         docker run -d --name "$container_name" "$container_name"
-        echo "Контейнер " + $i + " установлен"
+        echo "Контейнер " $i+1 " установлен"
     done
 }
 
