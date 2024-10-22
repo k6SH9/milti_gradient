@@ -50,8 +50,8 @@ update_files() {
     proxy_login=$(echo "$proxy" | cut -d':' -f3)
     proxy_password=$(echo "$proxy" | cut -d':' -f4)
 #Debug
-    echo "" proxy_ip
-    echo proxy_port
+    echo "ip" "$proxy_ip"
+    echo "port" "$proxy_port"
 
     # Заменяем email и password в main.go
     sed -i "s/\$email/$email/g" main.go
