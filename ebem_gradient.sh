@@ -39,11 +39,19 @@ get_next_container_name() {
 
 # Функция для обновления main.go и Dockerfile
 update_files() {
+#Debug
+#      group_size=5  # Определяем размер группы контейнеров
+#      proxy_index=$((($1 / $group_size) % ${#PROXIES[@]}))  # Используем прокси для группы контейнеров
+#      proxy="${PROXIES[$proxy_index]}"
+
     proxy="${PROXIES[$(($1 % ${#PROXIES[@]}))]}"
     proxy_ip=$(echo "$proxy" | cut -d':' -f1)
     proxy_port=$(echo "$proxy" | cut -d':' -f2)
     proxy_login=$(echo "$proxy" | cut -d':' -f3)
     proxy_password=$(echo "$proxy" | cut -d':' -f4)
+#Debug
+#    echo "" proxy_ip
+#    echo proxy_port
 
     # Заменяем email и password в main.go
     sed -i "s/\$email/$email/g" main.go
@@ -66,8 +74,8 @@ start_containers() {
         echo "Установка контейнера №" $((i+1))
         update_files $i $2 $3
         container_name=$(get_next_container_name)
-        docker build -t "$container_name" . > /dev/null 2>&1
-        docker run -d --name "$container_name" "$container_name" > /dev/null 2>&1
+        docker build -t "$container_name" .
+        docker run -d --name "$container_name" "$container_name"
         echo "Контейнер" $((i+1)) "установлен"
     done
 }
