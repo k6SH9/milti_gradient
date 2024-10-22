@@ -154,6 +154,13 @@ func main() {
 
 	time.Sleep(15 * time.Second)
 
+	err = captureFullScreen("full_screenshot.png")
+	if err != nil {
+		log.Fatalf("Не удалось сделать полный скриншот: %v", err)
+	}
+	fmt.Println("Полный скриншот успешно сохранён как full_screenshot.png")
+
+	time.Sleep(30 * time.Second)
 	fmt.Println("Нода успешно запущена!")
 
 	select {}
