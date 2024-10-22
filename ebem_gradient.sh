@@ -40,18 +40,18 @@ get_next_container_name() {
 # Функция для обновления main.go и Dockerfile
 update_files() {
 #Debug
-#      group_size=5  # Определяем размер группы контейнеров
-#      proxy_index=$((($1 / $group_size) % ${#PROXIES[@]}))  # Используем прокси для группы контейнеров
-#      proxy="${PROXIES[$proxy_index]}"
+    group_size=5  # Определяем размер группы контейнеров
+    proxy_index=$((($1 / $group_size) % ${#PROXIES[@]}))  # Используем прокси для группы контейнеров
+    proxy="${PROXIES[$proxy_index]}"
 
-    proxy="${PROXIES[$(($1 % ${#PROXIES[@]}))]}"
+#    proxy="${PROXIES[$(($1 % ${#PROXIES[@]}))]}"
     proxy_ip=$(echo "$proxy" | cut -d':' -f1)
     proxy_port=$(echo "$proxy" | cut -d':' -f2)
     proxy_login=$(echo "$proxy" | cut -d':' -f3)
     proxy_password=$(echo "$proxy" | cut -d':' -f4)
 #Debug
-#    echo "" proxy_ip
-#    echo proxy_port
+    echo "" proxy_ip
+    echo proxy_port
 
     # Заменяем email и password в main.go
     sed -i "s/\$email/$email/g" main.go
